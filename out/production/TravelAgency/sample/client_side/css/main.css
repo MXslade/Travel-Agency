@@ -1,6 +1,5 @@
 .header-section {
     -fx-background-color: #404040;
-    -fx-padding: 8 0 8 0;
     -fx-alignment: center;
     -fx-spacing: 16;
     -fx-pref-width: Infinity;
@@ -13,8 +12,16 @@
     -fx-padding: 8 16 8 16;
 }
 
+#aviaticketsLabel {
+    -fx-background-color: green;
+}
+
 .header-section Label:hover {
     -fx-text-fill: green;
+}
+
+#aviaticketsLabel: hover {
+    -fx-text-fill: white;
 }
 
 #slogan {
@@ -36,6 +43,8 @@
 
 .options-section {
     -fx-spacing: 16;
+    -fx-padding: 16 16 16 16;
+    -fx-alignment: center;
 }
 
 .options-section Label {
