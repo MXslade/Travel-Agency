@@ -1,0 +1,30 @@
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<VBox fx:controller="sample.client_side.Controllers.MainController"
+      xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER" spacing="16" prefWidth="1280" prefHeight="720">
+
+    <HBox styleClass="header-section">
+        <Label text="Авибилеты"/>
+        <Label text="Билеты на поезд"/>
+        <Label text="Билеты на поезд"/>
+        <Label text="Личный кабинет"/>
+    </HBox>
+
+    <HBox>
+        <ImageView fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../images/plane.gif"/>
+            </image>
+        </ImageView>
+        <Label id="slogan" text="Авиата - лидер по продаже билетов в Казахстане"/>
+    </HBox>
+
+    <stylesheets>
+        <URL value="@../css/main.css"/>
+    </stylesheets>
+
+</VBox>
