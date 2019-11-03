@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
+<?import javafx.scene.shape.Line?>
 <VBox fx:controller="sample.client_side.Controllers.MainController"
       xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER" spacing="16" prefWidth="1280" prefHeight="720">
 
@@ -14,14 +15,25 @@
         <Label text="Личный кабинет"/>
     </HBox>
 
-    <HBox>
+    <HBox styleClass="slogan-section">
         <ImageView fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../../images/plane.gif"/>
-            </image>
+            <Image url="@../../images/plane.gif"/>
         </ImageView>
         <Label id="slogan" text="Авиата - лидер по продаже билетов в Казахстане"/>
     </HBox>
+
+    <Line endX="1280" stroke="black"/>
+
+        <Label id="buyInKzLabel" text="Купить или забронировать авиабилеты онлайн в Казахстане"/>
+
+    <HBox styleClass="options-section">
+        <Label text="ТУДА И ОБРАТНО"/>
+        <Line endY="24"/>
+        <Label text="В ОДНУ СТОРОНУ"/>
+        <Line endY="24"/>
+        <Label text="НЕСКОЛЬКО ПОЛЕТОВ"/>
+    </HBox>
+
 
     <stylesheets>
         <URL value="@../css/main.css"/>

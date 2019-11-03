@@ -19,6 +19,32 @@
 
 #slogan {
     -fx-text-fill: black;
-    -fx-font-size: 16;
+    -fx-font-size: 20;
     -fx-font-name: Arial;
+}
+
+.slogan-section {
+    -fx-alignment: center;
+}
+
+#buyInKzLabel {
+    -fx-text-fill: black;
+    -fx-font-size: 24;
+    -fx-font-name: Arial;
+    -fx-font-weight: bold;
+}
+
+.options-section {
+    -fx-spacing: 16;
+}
+
+.options-section Label {
+    -fx-text-fill: black;
+    -fx-font-size: 18;
+    -fx-font-name: Arial;
+    -fx-font-weight: bold;
+}
+
+.options-section Label:hover {
+    -fx-text-fill: green;
 }
