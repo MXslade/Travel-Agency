@@ -5,8 +5,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Button?>
 <VBox fx:controller="sample.client_side.Controllers.MainController"
-      xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER" spacing="16" prefWidth="1280" prefHeight="720">
+      xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER"
+      spacing="16" prefWidth="1280" prefHeight="720">
 
     <HBox styleClass="header-section">
         <Label id="aviaticketsLabel" text="Авибилеты"/>
@@ -27,13 +30,16 @@
         <Label id="buyInKzLabel" text="Купить или забронировать авиабилеты онлайн в Казахстане"/>
 
     <HBox styleClass="options-section">
-        <Label text="ТУДА И ОБРАТНО"/>
+        <Label fx:id="backAndForthLabel" text="ТУДА И ОБРАТНО" onMouseClicked="#optionLabelClicked"/>
         <Line endY="24"/>
-        <Label text="В ОДНУ СТОРОНУ"/>
+        <Label fx:id="oneWayLabel" text="В ОДНУ СТОРОНУ" onMouseClicked="#optionLabelClicked"/>
         <Line endY="24"/>
-        <Label text="НЕСКОЛЬКО ПОЛЕТОВ"/>
+        <Label fx:id="severalTicketsLabel" text="НЕСКОЛЬКО ПОЛЕТОВ" onMouseClicked="#optionLabelClicked"/>
     </HBox>
 
+    <StackPane fx:id="optionsStackPane"/>
+
+    <Button id="findTicketsButton" text="НАЙТИ БИЛЕТЫ"/>
 
     <stylesheets>
         <URL value="@../css/main.css"/>

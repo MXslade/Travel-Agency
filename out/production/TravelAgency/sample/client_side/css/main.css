@@ -57,3 +57,14 @@
 .options-section Label:hover {
     -fx-text-fill: green;
 }
+
+#findTicketsButton {
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+    -fx-background-color: green;
+    -fx-font-size: 16;
+    -fx-font-name: Arial;
+    -fx-font-weight: bold;
+    -fx-padding: 8 32 8 32;
+    -fx-background-radius: 5em;
+}
