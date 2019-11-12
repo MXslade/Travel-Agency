@@ -27,7 +27,7 @@
 
     <Line endX="1280" stroke="black"/>
 
-        <Label id="buyInKzLabel" text="Купить или забронировать авиабилеты онлайн в Казахстане"/>
+    <Label id="buyInKzLabel" text="Купить или забронировать авиабилеты онлайн в Казахстане"/>
 
     <HBox styleClass="options-section">
         <Label fx:id="backAndForthLabel" text="ТУДА И ОБРАТНО" onMouseClicked="#optionLabelClicked"/>
@@ -39,7 +39,7 @@
 
     <StackPane fx:id="optionsStackPane"/>
 
-    <Button id="findTicketsButton" text="НАЙТИ БИЛЕТЫ"/>
+    <Button id="findTicketsButton" text="НАЙТИ БИЛЕТЫ" onMouseClicked="#findTickets"/>
 
     <stylesheets>
         <URL value="@../css/main.css"/>

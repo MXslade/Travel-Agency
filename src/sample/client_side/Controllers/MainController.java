@@ -1,7 +1,9 @@
 package sample.client_side.Controllers;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -28,7 +30,7 @@ public class MainController {
     private Border emptyBorder;
 
     private String styleForOptionElements = "-fx-font-name: Arial;" + "-fx-font-size: 16";
-    private String styleForOptionPanes = "-fx-spacing: 16;" + "-fx-alignment: center;";
+    private String styleForOptionPanes = "-fx-spacing: 16;" + "-fx-alignment: top-center;";
 
     @FXML
     private void initialize() {
@@ -45,6 +47,17 @@ public class MainController {
             showSeveralTicketsOption();
         } else if (mouseEvent.getSource() == oneWayLabel) {
             showOneWayOption();
+        }
+    }
+
+    @FXML
+    private void findTickets() {
+        if (backAndForthHBox.isVisible()) {
+            findBackAndForthTickets();
+        } else if (oneWayHBox.isVisible()) {
+            findOneWatTickets();
+        } else if (severalTicketsVBox.isVisible()) {
+            findSeveralTickets();
         }
     }
 
@@ -113,7 +126,19 @@ public class MainController {
 
     private void initSeveralTicketsOption() {
         severalTicketsVBox = new VBox();
-
+        severalTicketsVBox.setVisible(false);
+        Button addTicketButton = new Button("+ Добавить перелет");
+        addTicketButton.setStyle(styleForOptionElements);
+        addTicketButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                addTicketForSeveralTickets();
+            }
+        });
+        severalTicketsVBox.getChildren().add(addTicketButton);
+        severalTicketsVBox.setSpacing(16);
+        optionsStackPane.getChildren().add(severalTicketsVBox);
+        addTicketForSeveralTickets();
     }
 
     private void initOneWayTicketOption() {
@@ -130,5 +155,35 @@ public class MainController {
         oneWayHBox.setVisible(false);
         oneWayHBox.setStyle(styleForOptionPanes);
         optionsStackPane.getChildren().add(oneWayHBox);
+    }
+
+    private void addTicketForSeveralTickets() {
+        HBox hBox = new HBox();
+        TextField fromCityTextField = new TextField();
+        fromCityTextField.setPromptText("Откуда");
+        fromCityTextField.setStyle(styleForOptionElements);
+        TextField toCityTextField = new TextField();
+        toCityTextField.setPromptText("Куда");
+        toCityTextField.setStyle(styleForOptionElements);
+        DatePicker fromDatePicker = new DatePicker();
+        fromCityTextField.setStyle(styleForOptionElements);
+        hBox.getChildren().addAll(fromCityTextField, toCityTextField, fromDatePicker);
+        hBox.setStyle(styleForOptionPanes);
+        severalTicketsVBox.getChildren().add(hBox);
+        Button button = (Button) severalTicketsVBox.getChildren().filtered(node -> node instanceof Button).get(0);
+        severalTicketsVBox.getChildren().remove(button);
+        severalTicketsVBox.getChildren().add(button);
+    }
+
+    private void findBackAndForthTickets() {
+
+    }
+
+    private void findOneWatTickets() {
+
+    }
+
+    private void findSeveralTickets() {
+
     }
 }

@@ -39,7 +39,7 @@
 
     <StackPane fx:id="optionsStackPane"/>
 
-    <Button id="findTicketsButton" text="НАЙТИ БИЛЕТЫ"/>
+    <Button id="findTicketsButton" text="НАЙТИ БИЛЕТЫ" onMouseClicked="#findTickets"/>
 
     <stylesheets>
         <URL value="@../css/main.css"/>
