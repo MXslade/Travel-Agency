@@ -36,8 +36,11 @@ public class ClientHandler extends Thread {
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
+            if (request.getCode() == Code.SHOW_ONE_WAY_FLIGHT) {
 
-            if (request.getCode().equals("REMOVE")) {
+            } else if (request.getCode() == Code.SHOW_BACK_AND_FORTH_FLIGHT) {
+
+            } else if (request.getCode() == Code.SHOW_MULTIPLE_FLIGHT) {
 
             }
         }

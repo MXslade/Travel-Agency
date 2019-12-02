@@ -15,7 +15,7 @@ public class ServerApp {
     public ServerApp() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb?useUnicode=true&serverTimezone=UTC", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/travel_agency?useUnicode=true&serverTimezone=UTC", "root", "");
             serverSocket = new ServerSocket(8080);
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
