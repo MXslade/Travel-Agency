@@ -23,6 +23,8 @@ public class ServerApp {
     }
 
     public void start() {
+        //DBFiller dbFiller = new DBFiller(connection);
+        //dbFiller.start();
         while (true) {
             try{
                 System.out.println("Waiting for a client...");
