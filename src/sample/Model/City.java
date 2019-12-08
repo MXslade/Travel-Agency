@@ -60,12 +60,6 @@ public class City implements Serializable {
 
     @Override
     public String toString() {
-        return "City{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", countryName='" + countryName + '\'' +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
-                '}';
+        return name;
     }
 }

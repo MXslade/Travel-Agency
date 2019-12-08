@@ -1,17 +1,39 @@
 package sample.client_side.Controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import sample.Model.City;
+import sample.network.Request;
+import sample.network.RequestCode;
+import sample.network.Response;
+import sample.network.ResponseCode;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.sql.Date;
 
 public class MainController {
+
+    private Socket socket = null;
+    private ObjectInputStream ois = null;
+    private ObjectOutputStream oos = null;
+
+    private Request request = null;
+    private Response response = null;
+
+    private ObservableList<City> cities = FXCollections.observableArrayList();
+
+    private Alert errorOccurredAlert;
 
     @FXML
     private Label backAndForthLabel;
@@ -36,6 +58,8 @@ public class MainController {
     private void initialize() {
         initOptions();
         initBorder();
+        initNetworkErrorAlert();
+        initNetworkConnection();
         showBackAndForthOption();
     }
 
@@ -55,11 +79,13 @@ public class MainController {
         if (backAndForthHBox.isVisible()) {
             findBackAndForthTickets();
         } else if (oneWayHBox.isVisible()) {
-            findOneWatTickets();
+            findOneWayTickets();
         } else if (severalTicketsVBox.isVisible()) {
             findSeveralTickets();
         }
     }
+
+
 
     private void initOptions() {
         initBackAndForthOption();
@@ -75,6 +101,24 @@ public class MainController {
                 new BorderWidths(2),
                 Insets.EMPTY));
         emptyBorder = new Border(new BorderStroke(null, null, null, null));
+    }
+
+    private void initNetworkErrorAlert() {
+        errorOccurredAlert = new Alert(Alert.AlertType.ERROR);
+        errorOccurredAlert.setTitle("Network Error");
+        errorOccurredAlert.setHeaderText("Network failure occurred while running");
+        errorOccurredAlert.setContentText("Check you internet connection. Then Rerun program again");
+    }
+
+    private void initNetworkConnection() {
+        try {
+            socket = new Socket("127.0.0.1", 8080);
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+            getCities();
+        } catch (IOException e) {
+            errorOccurredAlert.showAndWait();
+        }
     }
 
     private void showBackAndForthOption() {
@@ -106,10 +150,12 @@ public class MainController {
 
     private void initBackAndForthOption() {
         backAndForthHBox = new HBox();
-        TextField fromCityTextField = new TextField();
+        ComboBox<City> fromCityTextField = new ComboBox<>();
+        fromCityTextField.setItems(cities);
         fromCityTextField.setPromptText("Откуда");
         fromCityTextField.setStyle(styleForOptionElements);
-        TextField toCityTextField = new TextField();
+        ComboBox<City> toCityTextField = new ComboBox<>();
+        toCityTextField.setItems(cities);
         toCityTextField.setPromptText("Куда");
         toCityTextField.setStyle(styleForOptionElements);
         DatePicker fromDatePicker = new DatePicker();
@@ -143,14 +189,19 @@ public class MainController {
 
     private void initOneWayTicketOption() {
         oneWayHBox = new HBox();
-        TextField fromCityTextField = new TextField();
+        ComboBox<City> fromCityTextField = new ComboBox<>();
+        fromCityTextField.setItems(cities);
         fromCityTextField.setPromptText("Откуда");
         fromCityTextField.setStyle(styleForOptionElements);
-        TextField toCityTextField = new TextField();
+        fromCityTextField.setId("fromCity");
+        ComboBox<City> toCityTextField = new ComboBox<>();
+        toCityTextField.setItems(cities);
         toCityTextField.setPromptText("Куда");
         toCityTextField.setStyle(styleForOptionElements);
+        toCityTextField.setId("toCity");
         DatePicker fromDatePicker = new DatePicker();
         fromDatePicker.setStyle(styleForOptionElements);
+        fromDatePicker.setId("fromDate");
         oneWayHBox.getChildren().addAll(fromCityTextField, toCityTextField, fromDatePicker);
         oneWayHBox.setVisible(false);
         oneWayHBox.setStyle(styleForOptionPanes);
@@ -159,10 +210,12 @@ public class MainController {
 
     private void addTicketForSeveralTickets() {
         HBox hBox = new HBox();
-        TextField fromCityTextField = new TextField();
+        ComboBox<City> fromCityTextField = new ComboBox<>();
+        fromCityTextField.setItems(cities);
         fromCityTextField.setPromptText("Откуда");
         fromCityTextField.setStyle(styleForOptionElements);
-        TextField toCityTextField = new TextField();
+        ComboBox<City> toCityTextField = new ComboBox<>();
+        toCityTextField.setItems(cities);
         toCityTextField.setPromptText("Куда");
         toCityTextField.setStyle(styleForOptionElements);
         DatePicker fromDatePicker = new DatePicker();
@@ -175,12 +228,42 @@ public class MainController {
         severalTicketsVBox.getChildren().add(button);
     }
 
+    private void getCities() {
+        request = new Request();
+        request.setRequestCode(RequestCode.SHOW_ALL_CITIES);
+        try {
+            oos.writeObject(request);
+            response = (Response) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            errorOccurredAlert.showAndWait();
+        }
+        if (response.getResponseCode() == ResponseCode.ALL_CITIES_FAILURE) {
+            errorOccurredAlert.showAndWait();
+        } else {
+            cities.setAll(response.getCities());
+        }
+    }
+
     private void findBackAndForthTickets() {
 
     }
 
-    private void findOneWatTickets() {
-
+    private void findOneWayTickets() {
+        City fromCity = null, toCity = null;
+        String fromDate = null;
+        for (Node node : oneWayHBox.getChildren()) {
+            if (node.getId().equals("fromCity")) {
+                fromCity = ((ComboBox<City>) node).getValue();
+            } else if (node.getId().equals("toCity")) {
+                toCity = ((ComboBox<City>) node).getValue();
+            } else if (node.getId().equals("fromDate")) {
+                fromDate = ((DatePicker) node).getEditor().getText();
+            }
+        }
+        if (fromCity == null || toCity == null || fromDate == null) {
+            return;
+        }
+        System.out.println(fromCity + " " + toCity + " " + fromDate);
     }
 
     private void findSeveralTickets() {

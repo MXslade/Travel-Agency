@@ -7,18 +7,18 @@ import java.util.List;
 
 public class Request implements Serializable {
 
-    private Code code;
+    private RequestCode requestCode;
     private City fromCity;
     private City toCity;
     private List<City> fromCities;
     private List<City> toCities;
 
-    public Code getCode() {
-        return code;
+    public RequestCode getRequestCode() {
+        return requestCode;
     }
 
-    public void setCode(Code code) {
-        this.code = code;
+    public void setRequestCode(RequestCode requestCode) {
+        this.requestCode = requestCode;
     }
 
     public City getFromCity() {
