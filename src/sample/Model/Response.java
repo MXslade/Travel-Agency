@@ -1,7 +1,4 @@
-package sample.network;
-
-import sample.Model.City;
-import sample.Model.Flight;
+package sample.Model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,9 +6,9 @@ import java.util.List;
 public class Response implements Serializable {
 
     private ResponseCode responseCode;
-    private Flight flight;
     private List<Flight> flights;
     private List<City> cities;
+    private User user;
 
     public ResponseCode getResponseCode() {
         return responseCode;
@@ -19,14 +16,6 @@ public class Response implements Serializable {
 
     public void setResponseCode(ResponseCode responseCode) {
         this.responseCode = responseCode;
-    }
-
-    public Flight getFlight() {
-        return flight;
-    }
-
-    public void setFlight(Flight flight) {
-        this.flight = flight;
     }
 
     public List<Flight> getFlights() {
@@ -43,5 +32,13 @@ public class Response implements Serializable {
 
     public void setCities(List<City> cities) {
         this.cities = cities;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

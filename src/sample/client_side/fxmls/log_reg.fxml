@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import java.net.URL?>
+<VBox fx:controller="sample.client_side.Controllers.LogRegController"
+      xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER"
+      spacing="16" prefWidth="1280" prefHeight="720">
+
+    <HBox styleClass="header-section">
+        <Label text="Авибилеты" onMouseClicked="#showMain"/>
+        <Label text="Билеты на поезд"/>
+        <Label text="Билеты на поезд"/>
+        <Label id="aviaticketsLabel" text="Личный кабинет"/>
+    </HBox>
+
+    <HBox styleClass="slogan-section">
+        <ImageView fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../images/plane.gif"/>
+        </ImageView>
+        <Label id="slogan" text="Авиата - лидер по продаже билетов в Казахстане"/>
+    </HBox>
+
+    <Line endX="1280" stroke="black"/>
+
+    <Label id="buyInKzLabel" text="Логин"/>
+    <TextField fx:id="loginLoginTextField" id="textField" promptText="Логин"/>
+    <PasswordField fx:id="passwordLoginPasswordField" id="textField" promptText="Пароль"/>
+    <Button id="findTicketsButton" text="Войти" onMouseClicked="#enterPressed"/>
+
+    <Label id="buyInKzLabel" text="Регистрация"/>
+    <TextField fx:id="nameRegTextField" id="textField" promptText="Имя"/>
+    <TextField fx:id="surnameRegTextField" id="textField" promptText="Фамилия"/>
+    <TextField fx:id="loginRegTextField" id="textField" promptText="Логин"/>
+    <PasswordField fx:id="passwordRegPasswordField" id="textField" promptText="Пароль"/>
+    <Button id="findTicketsButton" text="Зарегистрироваться" onMouseClicked="#regPressed"/>
+
+    <stylesheets>
+        <URL value="@../css/main.css"/>
+        <URL value="@../css/log_reg.css"/>
+    </stylesheets>
+
+</VBox>

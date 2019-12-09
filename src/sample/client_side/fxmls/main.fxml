@@ -7,6 +7,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.Button?>
+
 <VBox fx:controller="sample.client_side.Controllers.MainController"
       xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER"
       spacing="16" prefWidth="1280" prefHeight="720">
@@ -15,7 +16,7 @@
         <Label id="aviaticketsLabel" text="Авибилеты"/>
         <Label text="Билеты на поезд"/>
         <Label text="Билеты на поезд"/>
-        <Label text="Личный кабинет"/>
+        <Label text="Личный кабинет" onMouseClicked="#showAccount"/>
     </HBox>
 
     <HBox styleClass="slogan-section">

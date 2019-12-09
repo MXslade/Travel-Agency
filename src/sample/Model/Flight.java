@@ -1,24 +1,25 @@
 package sample.Model;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.sql.Date;
 
-public class Flight {
+public class Flight implements Serializable {
 
     private Long id;
     private City fromCity;
     private City toCity;
     private Time duration;
-    private Date start_date_time;
-    private Date end_date_time;
+    private Date startDateTime;
+    private Date endDateTime;
 
-    public Flight(Long id, City fromCity, City toCity, Time duration, Date start_date_time, Date end_date_time) {
+    public Flight(Long id, City fromCity, City toCity, Time duration, Date startDateTime, Date endDateTime) {
         this.id = id;
         this.fromCity = fromCity;
         this.toCity = toCity;
         this.duration = duration;
-        this.start_date_time = start_date_time;
-        this.end_date_time = end_date_time;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
     }
 
     public Long getId() {
@@ -53,20 +54,20 @@ public class Flight {
         this.duration = duration;
     }
 
-    public Date getStart_date_time() {
-        return start_date_time;
+    public Date getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setStart_date_time(Date start_date_time) {
-        this.start_date_time = start_date_time;
+    public void setStartDateTime(Date startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public Date getEnd_date_time() {
-        return end_date_time;
+    public Date getEndDateTime() {
+        return endDateTime;
     }
 
-    public void setEnd_date_time(Date end_date_time) {
-        this.end_date_time = end_date_time;
+    public void setEndDateTime(Date endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
     @Override
@@ -76,8 +77,8 @@ public class Flight {
                 ", fromCity=" + fromCity +
                 ", toCity=" + toCity +
                 ", duration=" + duration +
-                ", start_date_time=" + start_date_time +
-                ", end_date_time=" + end_date_time +
+                ", start_date_time=" + startDateTime +
+                ", end_date_time=" + endDateTime +
                 '}';
     }
 }

@@ -11,25 +11,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import sample.Model.City;
-import sample.network.Request;
-import sample.network.RequestCode;
-import sample.network.Response;
-import sample.network.ResponseCode;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.sql.Date;
+import sample.client_side.Main;
+import sample.client_side.ServerConnector;
 
 public class MainController {
 
-    private Socket socket = null;
-    private ObjectInputStream ois = null;
-    private ObjectOutputStream oos = null;
-
-    private Request request = null;
-    private Response response = null;
+    private ServerConnector serverConnector = Main.serverConnector;
 
     private ObservableList<City> cities = FXCollections.observableArrayList();
 
@@ -59,7 +46,7 @@ public class MainController {
         initOptions();
         initBorder();
         initNetworkErrorAlert();
-        initNetworkConnection();
+        getCities();
         showBackAndForthOption();
     }
 
@@ -108,17 +95,6 @@ public class MainController {
         errorOccurredAlert.setTitle("Network Error");
         errorOccurredAlert.setHeaderText("Network failure occurred while running");
         errorOccurredAlert.setContentText("Check you internet connection. Then Rerun program again");
-    }
-
-    private void initNetworkConnection() {
-        try {
-            socket = new Socket("127.0.0.1", 8080);
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());
-            getCities();
-        } catch (IOException e) {
-            errorOccurredAlert.showAndWait();
-        }
     }
 
     private void showBackAndForthOption() {
@@ -229,18 +205,10 @@ public class MainController {
     }
 
     private void getCities() {
-        request = new Request();
-        request.setRequestCode(RequestCode.SHOW_ALL_CITIES);
-        try {
-            oos.writeObject(request);
-            response = (Response) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            errorOccurredAlert.showAndWait();
-        }
-        if (response.getResponseCode() == ResponseCode.ALL_CITIES_FAILURE) {
+        if (serverConnector.getCities() == null) {
             errorOccurredAlert.showAndWait();
         } else {
-            cities.setAll(response.getCities());
+            cities.setAll(serverConnector.getCities());
         }
     }
 
@@ -263,10 +231,15 @@ public class MainController {
         if (fromCity == null || toCity == null || fromDate == null) {
             return;
         }
-        System.out.println(fromCity + " " + toCity + " " + fromDate);
+        System.out.println(serverConnector.getOneWayFlights(fromCity, toCity, fromDate));
+        Main.showResultScene();
     }
 
     private void findSeveralTickets() {
 
+    }
+
+    public void showAccount(MouseEvent mouseEvent) {
+        Main.showAccountScene();
     }
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import java.net.URL?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="sample.client_side.Controllers.ResultController"
+      prefHeight="720.0" prefWidth="1280.0"
+      alignment="BASELINE_CENTER"
+      spacing="16" fx:id="mainVBox">
+
+    <HBox styleClass="header-section">
+        <Label id="aviaticketsLabel" text="Авибилеты"/>
+        <Label text="Билеты на поезд"/>
+        <Label text="Билеты на поезд"/>
+        <Label text="Личный кабинет"/>
+    </HBox>
+
+    <HBox styleClass="slogan-section">
+        <ImageView fitHeight="100" fitWidth="100" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../images/plane.gif"/>
+        </ImageView>
+        <Label id="slogan" text="Авиата - лидер по продаже билетов в Казахстане"/>
+    </HBox>
+
+    <Line endX="1280" stroke="black"/>
+
+<!--    <ListView fx:id="resultListView"/>-->
+
+
+    <stylesheets>
+        <URL value="@../css/main.css"/>
+    </stylesheets>
+
+</VBox>
