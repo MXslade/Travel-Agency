@@ -19,6 +19,10 @@ public class Request implements Serializable {
     private String password;
     private String name;
     private String surname;
+    private String cityName;
+    private String country;
+    private double latitude;
+    private double longitude;
 
     public RequestCode getRequestCode() {
         return requestCode;
@@ -122,5 +126,37 @@ public class Request implements Serializable {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

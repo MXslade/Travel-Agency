@@ -118,6 +118,25 @@ public class ClientHandler extends Thread {
                     e.printStackTrace();
                 }
 
+            } else if (request.getRequestCode() == RequestCode.ADD_CITY) {
+
+                City city = addCity(request.getCityName(), request.getCountry(), request.getLatitude(), request.getLongitude());
+                Response response = new Response();
+
+                if (city == null) {
+                    response.setResponseCode(ResponseCode.ADD_CITY_FAILURE);
+                } else {
+                    response.setCity(city);
+                    response.setResponseCode(ResponseCode.ADD_CITY_SUCCESSFUL);
+                    addRawFlightsFor(city);
+                }
+
+                try {
+                    objectOutputStream.writeObject(response);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             } else if (request.getRequestCode() == RequestCode.EXIT) {
                 try {
                     objectOutputStream.close();
@@ -236,6 +255,111 @@ public class ClientHandler extends Thread {
             e.printStackTrace();
         }
         return getUser(login, password);
+    }
+
+    private City addCity(String name, String country, double latitude, double longitude) {
+
+        try {
+
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM city WHERE name = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            if (!rs.next()) {
+                PreparedStatement ps2 = connection.prepareStatement("INSERT INTO city (id, name, country, longitude, latitude) VALUES(NULL, ?, ?, ?, ?)");
+                ps2.setString(1, name);
+                ps2.setString(2, country);
+                ps2.setDouble(3, longitude);
+                ps2.setDouble(4, latitude);
+                ps2.executeUpdate();
+                ps2.close();
+            } else {
+                ps.close();
+                return null;
+            }
+
+            ps.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return getCity(name);
+    }
+
+    private City getCity(String name) {
+        City city = null;
+
+        try {
+
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM city WHERE name = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Long id = rs.getLong("id");
+                String country = rs.getString("country");
+                double latitude = rs.getDouble("latitude");
+                double longitude = rs.getDouble("longitude");
+                city = new City(id, name, country, latitude, longitude);
+            }
+
+            ps.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return city;
+    }
+
+    private void addRawFlightsFor(City city) {
+        List<City> cities = getAllCitiesFromDb();
+        List<FlightRaw> flightsRaw = new ArrayList<>();
+        if (cities != null) {
+            for (City c : cities) {
+                if (!c.getId().equals(city.getId())) {
+                    long minutesOfFlight = getMinutesOfFlight(city, c);
+                    flightsRaw.add(new FlightRaw(null, city.getId(), c.getId(), minutesOfFlight));
+                    flightsRaw.add(new FlightRaw(null, c.getId(), city.getId(), minutesOfFlight));
+                }
+            }
+        }
+        for (FlightRaw f : flightsRaw) {
+            try {
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO flgihts_raw (id, from_city, to_city, duration) VALUES (NULL, ?, ?, ?)");
+                ps.setLong(1, f.getFrom_city());
+                ps.setLong(2, f.getTo_city());
+                ps.setLong(3, f.getDuration());
+                ps.executeUpdate();
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private long getMinutesOfFlight(City city1, City city2) {
+        double R = 6371e3;
+
+        double latInRadians1 = Math.toRadians(city1.getLatitude());
+        double latInRadians2 = Math.toRadians(city2.getLatitude());
+        double diffInLat = Math.toRadians(city2.getLatitude() - city1.getLatitude());
+        double diffInLong = Math.toRadians(city2.getLongitude() - city1.getLongitude());
+
+        double a = Math.sin(diffInLat / 2) * Math.sin(diffInLat / 2) +
+                Math.cos(latInRadians1) * Math.cos(latInRadians2) *
+                        Math.sin(diffInLong / 2) * Math.sin(diffInLong / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        double d = R * c;
+        if (d < 10) {
+            d *= 1e5;
+        } else {
+            d /= 1e3;
+        }
+        double hoursOfFlight = d / 900;
+        return Math.round(hoursOfFlight * 60);
     }
 
 }

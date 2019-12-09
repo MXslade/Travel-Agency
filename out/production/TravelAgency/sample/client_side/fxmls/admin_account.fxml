@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox fx:controller="sample.client_side.Controllers.AdminAccountController"
+      xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER"
+      spacing="16" prefWidth="1280" prefHeight="720">
+
+    <HBox spacing="16">
+        <VBox spacing="8">
+            <Label text="Добавить Город"/>
+            <TextField fx:id="nameAddCityTextField" promptText="Название города"/>
+            <TextField fx:id="countryAddCityTextField" promptText="Страна"/>
+            <TextField fx:id="longitudeAddCityTextField" promptText="Долгота"/>
+            <TextField fx:id="latitudeAddCityTextField" promptText="Ширита"/>
+            <Button text="Добавить город" onMouseClicked="#addCity"/>
+        </VBox>
+        <VBox spacing="8">
+            <Label text="Изменить Город"/>
+            <ComboBox fx:id="changeCityComboBox"/>
+            <TextField promptText="Название города"/>
+            <TextField promptText="Страна"/>
+            <TextField promptText="Долгота"/>
+            <TextField promptText="Широта"/>
+            <Button text="Изменить город"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="16">
+        <VBox spacing="8">
+            <Label text="Добавить Рейс"/>
+            <TextField promptText="Компания"/>
+            <ComboBox fx:id="fromCityComboBox"/>
+            <ComboBox fx:id="toCityComboBox"/>
+            <DatePicker/>
+            <TextField promptText="Время(чч:мм)"/>
+            <TextField promptText="Цена"/>
+            <TextField promptText="Количество мест"/>
+            <Button text="Добавить перелет"/>
+        </VBox>
+    </HBox>
+
+</VBox>

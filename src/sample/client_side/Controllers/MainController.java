@@ -18,7 +18,7 @@ public class MainController {
 
     private ServerConnector serverConnector = Main.serverConnector;
 
-    private ObservableList<City> cities = FXCollections.observableArrayList();
+    private ObservableList<City> cities;
 
     private Alert errorOccurredAlert;
 
@@ -43,10 +43,10 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        getCities();
         initOptions();
         initBorder();
         initNetworkErrorAlert();
-        getCities();
         showBackAndForthOption();
     }
 
@@ -205,10 +205,11 @@ public class MainController {
     }
 
     private void getCities() {
-        if (serverConnector.getCities() == null) {
+        if (serverConnector.getCitiesFromDb() == null) {
             errorOccurredAlert.showAndWait();
+            cities = FXCollections.observableArrayList();
         } else {
-            cities.setAll(serverConnector.getCities());
+            cities = serverConnector.getCities();
         }
     }
 

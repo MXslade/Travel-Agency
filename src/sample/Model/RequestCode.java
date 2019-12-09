@@ -8,4 +8,5 @@ public enum RequestCode {
     EXIT,
     LOGIN,
     REGISTRATION,
+    ADD_CITY,
 }

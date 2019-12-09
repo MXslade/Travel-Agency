@@ -1,6 +1,5 @@
 package sample.client_side;
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.Model.*;
@@ -21,9 +20,11 @@ public class ServerConnector {
     private ObjectOutputStream oos = null;
 
     private ObservableList<Flight> lastFlights;
+    private ObservableList<City> cities;
 
     public ServerConnector() {
         lastFlights = FXCollections.observableArrayList();
+        cities = FXCollections.observableArrayList();
         try {
             socket = new Socket("127.0.0.1", 8080);
             oos = new ObjectOutputStream(socket.getOutputStream());
@@ -41,7 +42,15 @@ public class ServerConnector {
         this.lastFlights = lastFlights;
     }
 
-    public List<City> getCities() {
+    public void setCities(ObservableList<City> cities) {
+        this.cities = cities;
+    }
+
+    public ObservableList<City> getCities() {
+        return cities;
+    }
+
+    public List<City> getCitiesFromDb() {
         Request request = new Request();
         Response response;
         request.setRequestCode(RequestCode.SHOW_ALL_CITIES);
@@ -54,6 +63,8 @@ public class ServerConnector {
         if (response.getResponseCode() == ResponseCode.ALL_CITIES_FAILURE) {
             return null;
         }
+        cities.clear();
+        cities.setAll(response.getCities());
         return response.getCities();
     }
 
@@ -133,5 +144,27 @@ public class ServerConnector {
             return null;
         }
         return response.getUser();
+    }
+
+    public City addCity(String name, String country, double latitude, double longitude) {
+        Request request = new Request();
+        request.setRequestCode(RequestCode.ADD_CITY);
+        request.setCityName(name);
+        request.setCountry(country);
+        request.setLatitude(latitude);
+        request.setLongitude(longitude);
+        Response response;
+        try {
+            oos.writeObject(request);
+            response = (Response) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (response.getResponseCode() == ResponseCode.ADD_CITY_FAILURE) {
+            return null;
+        }
+        cities.add(response.getCity());
+        return response.getCity();
     }
 }

@@ -9,6 +9,7 @@ public class Response implements Serializable {
     private List<Flight> flights;
     private List<City> cities;
     private User user;
+    private City city;
 
     public ResponseCode getResponseCode() {
         return responseCode;
@@ -40,5 +41,13 @@ public class Response implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 }
