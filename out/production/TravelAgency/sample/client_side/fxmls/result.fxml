@@ -15,10 +15,10 @@
       spacing="16" fx:id="mainVBox">
 
     <HBox styleClass="header-section">
-        <Label id="aviaticketsLabel" text="Авибилеты"/>
+        <Label id="aviaticketsLabel" text="Авибилеты" onMouseClicked="#showMain"/>
         <Label text="Билеты на поезд"/>
         <Label text="Билеты на поезд"/>
-        <Label text="Личный кабинет"/>
+        <Label text="Личный кабинет" onMouseClicked="#showAccount"/>
     </HBox>
 
     <HBox styleClass="slogan-section">
@@ -30,7 +30,9 @@
 
     <Line endX="1280" stroke="black"/>
 
-<!--    <ListView fx:id="resultListView"/>-->
+
+        <VBox fx:id="flightsVBox" spacing="16" alignment="CENTER"/>
+
 
 
     <stylesheets>

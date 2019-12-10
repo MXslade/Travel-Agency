@@ -2,24 +2,35 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Main models where created">
-      <change afterPath="$PROJECT_DIR$/src/sample/Model/FlightRaw.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/client_side/Controllers/AdminAccountController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/client_side/fxmls/admin_account.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/Model/FlightFull.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/client_side/Controllers/UserAccountController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/client_side/fxmls/user_account.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/FlightRaw.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/FlightRaw.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/Request.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/Request.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/RequestCode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/RequestCode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/Response.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/Response.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/ResponseCode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/Model/ResponseCode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/Controllers/LogRegController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/Controllers/LogRegController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/Controllers/AdminAccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/Controllers/AdminAccountController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/Controllers/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/Controllers/MainController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/Controllers/ResultController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/Controllers/ResultController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/CustomNodes/FlightPane.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/CustomNodes/FlightPane.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/ServerConnector.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/ServerConnector.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/fxmls/admin_account.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/fxmls/admin_account.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/fxmls/result.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/client_side/fxmls/result.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TravelAgency/sample/network/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TravelAgency/sample/network/ClientHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/Model/FlightRaw.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Model/FlightRaw.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Model/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Model/Request.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Model/RequestCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Model/RequestCode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Model/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Model/Response.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Model/ResponseCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Model/ResponseCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/client_side/Controllers/AdminAccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/client_side/Controllers/AdminAccountController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/client_side/Controllers/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/client_side/Controllers/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/client_side/Controllers/ResultController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/client_side/Controllers/ResultController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/client_side/CustomNodes/FlightPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/client_side/CustomNodes/FlightPane.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/client_side/ServerConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/client_side/ServerConnector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/client_side/fxmls/admin_account.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/client_side/fxmls/admin_account.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/client_side/fxmls/result.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/client_side/fxmls/result.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/network/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/network/ClientHandler.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

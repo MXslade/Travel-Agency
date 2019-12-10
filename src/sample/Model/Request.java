@@ -23,6 +23,17 @@ public class Request implements Serializable {
     private String country;
     private double latitude;
     private double longitude;
+    private String company;
+    private Long price;
+    private Integer year;
+    private Integer month;
+    private Integer day;
+    private Integer hour;
+    private Integer minute;
+    private Integer numberOfPassengers;
+    private Long flightRawId;
+    private FlightFull flightFull;
+    private Long userId;
 
     public RequestCode getRequestCode() {
         return requestCode;
@@ -158,5 +169,93 @@ public class Request implements Serializable {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getDay() {
+        return day;
+    }
+
+    public void setDay(Integer day) {
+        this.day = day;
+    }
+
+    public Integer getHour() {
+        return hour;
+    }
+
+    public void setHour(Integer hour) {
+        this.hour = hour;
+    }
+
+    public Integer getMinute() {
+        return minute;
+    }
+
+    public void setMinute(Integer minute) {
+        this.minute = minute;
+    }
+
+    public Integer getNumberOfPassengers() {
+        return numberOfPassengers;
+    }
+
+    public void setNumberOfPassengers(Integer numberOfPassengers) {
+        this.numberOfPassengers = numberOfPassengers;
+    }
+
+    public Long getFlightRawId() {
+        return flightRawId;
+    }
+
+    public void setFlightRawId(Long flightRawId) {
+        this.flightRawId = flightRawId;
+    }
+
+    public FlightFull getFlightFull() {
+        return flightFull;
+    }
+
+    public void setFlightFull(FlightFull flightFull) {
+        this.flightFull = flightFull;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

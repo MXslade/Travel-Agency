@@ -1,6 +1,8 @@
 package sample.Model;
 
-public class FlightRaw {
+import java.io.Serializable;
+
+public class FlightRaw implements Serializable {
 
     private Long id;
     private Long from_city;

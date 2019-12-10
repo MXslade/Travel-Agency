@@ -219,20 +219,22 @@ public class MainController {
 
     private void findOneWayTickets() {
         City fromCity = null, toCity = null;
-        String fromDate = null;
+        Integer year = null, month = null, day = null;
         for (Node node : oneWayHBox.getChildren()) {
             if (node.getId().equals("fromCity")) {
                 fromCity = ((ComboBox<City>) node).getValue();
             } else if (node.getId().equals("toCity")) {
                 toCity = ((ComboBox<City>) node).getValue();
             } else if (node.getId().equals("fromDate")) {
-                fromDate = ((DatePicker) node).getEditor().getText();
+                year = ((DatePicker) node).getValue().getYear();
+                month = ((DatePicker) node).getValue().getMonthValue();
+                day = ((DatePicker) node).getValue().getDayOfMonth();
             }
         }
-        if (fromCity == null || toCity == null || fromDate == null) {
+        if (fromCity == null || toCity == null || year == null) {
             return;
         }
-        System.out.println(serverConnector.getOneWayFlights(fromCity, toCity, fromDate));
+        System.out.println(serverConnector.getOneWayFlights(fromCity, toCity, year, month, day));
         Main.showResultScene();
     }
 

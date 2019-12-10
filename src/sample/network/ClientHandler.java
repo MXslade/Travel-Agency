@@ -1,5 +1,6 @@
 package sample.network;
 
+import com.mysql.cj.xdevapi.SqlDataResult;
 import sample.Model.*;
 
 import java.io.IOException;
@@ -44,13 +45,14 @@ public class ClientHandler extends Thread {
 
             if (request.getRequestCode() == RequestCode.SHOW_ONE_WAY_FLIGHT) {
 
-                List<Flight> flights = getOneWayFlight(request.getFromCity(), request.getToCity(), request.getFromDate());
+                List<FlightFull> flights = getOneWayFlight(request.getFromCity(), request.getToCity(),
+                        request.getYear(), request.getMonth(), request.getDay());
                 Response response = new Response();
 
                 if (flights == null) {
                     response.setResponseCode(ResponseCode.ONE_WAY_FLIGHT_FAILURE);
                 } else {
-                    response.setFlights(flights);
+                    response.setFlightsFull(flights);
                     response.setResponseCode(ResponseCode.ONE_WAY_FLIGHT_SUCCESSFUL);
                 }
 
@@ -137,6 +139,79 @@ public class ClientHandler extends Thread {
                     e.printStackTrace();
                 }
 
+            } else if (request.getRequestCode() == RequestCode.ADD_FLIGHT_FULL) {
+
+                FlightFull flightFull = addFlightFull(request.getCompany(), request.getFromCity(), request.getToCity(),
+                        request.getPrice(), request.getYear(), request.getMonth(), request.getDay(),
+                        request.getHour(), request.getMinute(), request.getNumberOfPassengers());
+                Response response = new Response();
+
+                if (flightFull == null) {
+                    response.setResponseCode(ResponseCode.ADD_FLIGHT_FULL_FAILURE);
+                } else {
+                    response.setFlightFull(flightFull);
+                    response.setResponseCode(ResponseCode.ADD_FLIGHT_FULL_SUCCESSFUL);
+                }
+
+                try {
+                    objectOutputStream.writeObject(response);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (request.getRequestCode() == RequestCode.GET_FLIGHT_RAW) {
+
+                FlightRaw flightRaw = getFlightRaw(request.getFlightRawId());
+                Response response = new Response();
+
+                if (flightRaw == null) {
+                    response.setResponseCode(ResponseCode.GET_FLIGHT_RAW_FAILURE);
+                } else {
+                    response.setFlightRaw(flightRaw);
+                    response.setResponseCode(ResponseCode.GET_FLIGHT_RAW_SUCCESSFUL);
+                }
+
+                try {
+                    objectOutputStream.writeObject(response);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (request.getRequestCode() == RequestCode.BUY_TICKET) {
+
+                boolean result = buyTicket(request.getUserId(), request.getFlightFull());
+                Response response = new Response();
+
+                if (!result) {
+                    response.setResponseCode(ResponseCode.BUY_TICKET_FAILURE);
+                } else {
+                    response.setResponseCode(ResponseCode.BUY_TICKET_SUCCESSFUL);
+                }
+
+                try {
+                    objectOutputStream.writeObject(response);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (request.getRequestCode() == RequestCode.SHOW_BOUGHT_FLIGHTS) {
+
+                List<FlightFull> flights = getBoughtFlights(request.getUserId());
+                Response response = new Response();
+
+                if (flights == null) {
+                    response.setResponseCode(ResponseCode.SHOW_BOUGHT_FLIGHTS_FAILURE);
+                } else {
+                    response.setFlightsFull(flights);
+                    response.setResponseCode(ResponseCode.SHOW_BOUGHT_FLIGHTS_SUCCESSFUL);
+                }
+
+                try {
+                    objectOutputStream.writeObject(response);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             } else if (request.getRequestCode() == RequestCode.EXIT) {
                 try {
                     objectOutputStream.close();
@@ -175,27 +250,51 @@ public class ClientHandler extends Thread {
         return cities;
     }
 
-    private List<Flight> getOneWayFlight(City fromCity, City toCity, Date fromDate) {
-        List<Flight> flights = new ArrayList<>();
+    private List<FlightFull> getOneWayFlight(City fromCity, City toCity, Integer year, Integer month, Integer day) {
+        List<FlightFull> flights = new ArrayList<>();
+        FlightRaw flightRaw = null;
         try {
 
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM flight WHERE from_city = ? AND to_city = ? AND start_date_time = ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM flgihts_raw WHERE from_city = ? AND to_city = ?");
             ps.setLong(1, fromCity.getId());
             ps.setLong(2, toCity.getId());
-            ps.setString(3, new SimpleDateFormat("yyyy-MM-dd").format(fromDate));
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Long id = rs.getLong("id");
-                Time duration = rs.getTime("duration");
-                duration.setTime(duration.getTime() - 6 * 3600 * 1000);
-                Date startDateTime = rs.getDate("start_date_time");
-                Date endDateTime = rs.getDate("end_date_time");
-                flights.add(new Flight(id, fromCity, toCity, duration, startDateTime, endDateTime));
+                Long duration = rs.getLong("duration");
+                flightRaw = new FlightRaw(id, fromCity.getId(), toCity.getId(), duration);
             }
 
             ps.close();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (flightRaw == null) {
+            return null;
+        }
+
+        try {
+
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM flights_full WHERE flight_id = ? " +
+                    "AND year = ? AND month = ? AND day = ?");
+            ps.setLong(1, flightRaw.getId());
+            ps.setInt(2, year);
+            ps.setInt(3, month);
+            ps.setInt(4, day);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Long id = rs.getLong("id");
+                String companyName = rs.getString("company_name");
+                Long price = rs.getLong("price");
+                Integer hour = rs.getInt("hour");
+                Integer minute = rs.getInt("minute");
+                Integer numberOfPassengers = rs.getInt("number_of_passengers");
+                flights.add(new FlightFull(id, companyName, flightRaw.getId(), price, year, month, day, hour, minute, numberOfPassengers));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             flights = null;
@@ -337,6 +436,190 @@ public class ClientHandler extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+
+    private FlightFull addFlightFull(String company, City fromCity, City toCity, Long price, Integer year,
+                                     Integer month, Integer day, Integer hour, Integer minute,
+                                     Integer numberOfPassengers) {
+
+        Long flight_id = null;
+
+        try {
+
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM flgihts_raw WHERE from_city = ? AND to_city = ?");
+            ps.setLong(1, fromCity.getId());
+            ps.setLong(2, toCity.getId());
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                flight_id = rs.getLong("id");
+            } else {
+                return null;
+            }
+
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO flights_full (id, company_name, flight_id, " +
+                    "price, year, month, day, hour, minute, number_of_passengers) VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setString(1, company);
+            ps.setLong(2, flight_id);
+            ps.setLong(3, price);
+            ps.setInt(4, year);
+            ps.setInt(5, month);
+            ps.setInt(6, day);
+            ps.setInt(7, hour);
+            ps.setInt(8, minute);
+            ps.setInt(9, numberOfPassengers);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return getFlightFull(company, flight_id, price, year, month, day, hour, minute, numberOfPassengers);
+
+    }
+
+    private FlightFull getFlightFull(String company, Long flight_id, Long price, Integer year,
+                                     Integer month, Integer day, Integer hour, Integer minute,
+                                     Integer numberOfPassengers) {
+
+        FlightFull flightFull = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM flights_full WHERE company_name = ? " +
+                    "AND flight_id = ? AND price = ? AND year = ? AND month = ? AND day = ? AND hour = ? AND minute = ? " +
+                    "AND number_of_passengers = ?");
+            ps.setString(1, company);
+            ps.setLong(2, flight_id);
+            ps.setLong(3, price);
+            ps.setInt(4, year);
+            ps.setInt(5, month);
+            ps.setInt(6, day);
+            ps.setInt(7, hour);
+            ps.setInt(8, minute);
+            ps.setInt(9, numberOfPassengers);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Long id = rs.getLong("id");
+                flightFull = new FlightFull(id, company, flight_id, price, year, month, day, hour, minute, numberOfPassengers);
+            }
+
+            ps.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flightFull;
+    }
+
+    private FlightRaw getFlightRaw(Long id) {
+
+        FlightRaw flightRaw = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM flgihts_raw WHERE id = ? ");
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Long fromCity = rs.getLong("from_city");
+                Long toCity = rs.getLong("to_city");
+                Long duration = rs.getLong("duration");
+                flightRaw = new FlightRaw(id, fromCity, toCity, duration);
+            }
+
+            ps.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flightRaw;
+
+    }
+
+    private boolean buyTicket(long userId, FlightFull flightFull) {
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO user_flight (user_id, flights_full, price) VALUES(?, ?, ?)");
+            ps.setLong(1, userId);
+            ps.setLong(2, flightFull.getId());
+            ps.setLong(3, flightFull.getPrice());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE flights_full SET number_of_passengers = ? WHERE id = ?");
+            ps.setInt(1, flightFull.getNumberOfPassengers() - 1);
+            ps.setLong(2, flightFull.getId());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+
+    }
+
+    private List<FlightFull> getBoughtFlights(Long userId) {
+        List<FlightFull> flights = new ArrayList<>();
+        List<Long> ids = new ArrayList<>();
+
+        try {
+
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM user_flight WHERE user_id = ?");
+            ps.setLong(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ids.add(rs.getLong("flights_full"));
+            }
+
+            ps.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            for (Long id : ids) {
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM flights_full WHERE id = ?");
+                ps.setLong(1, id);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    Long fid = rs.getLong("id");
+                    String company = rs.getString("company_name");
+                    Long flight_id =rs.getLong("flight_id");
+                    Long price = rs.getLong("price");
+                    Integer year = rs.getInt("year");
+                    Integer month = rs.getInt("month");
+                    Integer day = rs.getInt("day");
+                    Integer hour = rs.getInt("hour");
+                    Integer minute = rs.getInt("minute");
+                    Integer number_of_passengers = rs.getInt("number_of_passengers");
+                    flights.add(new FlightFull(fid, company, flight_id, price, year, month, day, hour, minute, number_of_passengers));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return flights;
     }
 
     private long getMinutesOfFlight(City city1, City city2) {

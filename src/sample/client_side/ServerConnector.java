@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ServerConnector {
@@ -19,7 +16,7 @@ public class ServerConnector {
     private ObjectInputStream ois = null;
     private ObjectOutputStream oos = null;
 
-    private ObservableList<Flight> lastFlights;
+    private ObservableList<FlightFull> lastFlights;
     private ObservableList<City> cities;
 
     public ServerConnector() {
@@ -34,11 +31,11 @@ public class ServerConnector {
         }
     }
 
-    public ObservableList<Flight> getLastFlights() {
+    public ObservableList<FlightFull> getLastFlights() {
         return lastFlights;
     }
 
-    public void setLastFlights(ObservableList<Flight> lastFlights) {
+    public void setLastFlights(ObservableList<FlightFull> lastFlights) {
         this.lastFlights = lastFlights;
     }
 
@@ -68,19 +65,17 @@ public class ServerConnector {
         return response.getCities();
     }
 
-    public List<Flight> getOneWayFlights(City fromCity, City toCity, String fromDate) {
+    public List<FlightFull> getOneWayFlights(City fromCity, City toCity, Integer year, Integer month, Integer day) {
+
         Request request = new Request();
+        request.setRequestCode(RequestCode.SHOW_ONE_WAY_FLIGHT);
         request.setFromCity(fromCity);
         request.setToCity(toCity);
-        try {
-            Date date = new Date(new SimpleDateFormat("dd/MM/yyyy").parse(fromDate).getTime());
-            request.setFromDate(date);
-        } catch (ParseException e) {
-            request.setFromDate(null);
-            e.printStackTrace();
-        }
-        request.setRequestCode(RequestCode.SHOW_ONE_WAY_FLIGHT);
+        request.setYear(year);
+        request.setMonth(month);
+        request.setDay(day);
         Response response;
+
         try {
             oos.writeObject(request);
             response = (Response) ois.readObject();
@@ -88,12 +83,15 @@ public class ServerConnector {
             e.printStackTrace();
             return null;
         }
+
         if (response.getResponseCode() == ResponseCode.ONE_WAY_FLIGHT_FAILURE) {
             return null;
         }
+
         lastFlights.clear();
-        lastFlights.setAll(response.getFlights());
-        return response.getFlights();
+        lastFlights.setAll(response.getFlightsFull());
+        return response.getFlightsFull();
+
     }
 
     public void close() {
@@ -166,5 +164,106 @@ public class ServerConnector {
         }
         cities.add(response.getCity());
         return response.getCity();
+    }
+
+    public FlightFull addFlightFull(String company, City fromCity, City toCity, Long price,
+            Integer year, Integer month, Integer day, Integer hour, Integer minute, Integer numberOfPassengers) {
+
+        Request request = new Request();
+        request.setRequestCode(RequestCode.ADD_FLIGHT_FULL);
+        request.setCompany(company);
+        request.setFromCity(fromCity);
+        request.setToCity(toCity);
+        request.setPrice(price);
+        request.setYear(year);
+        request.setMonth(month);
+        request.setDay(day);
+        request.setHour(hour);
+        request.setMinute(minute);
+        request.setNumberOfPassengers(numberOfPassengers);
+        Response response;
+
+        try {
+            oos.writeObject(request);
+            response = (Response) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (response.getResponseCode() == ResponseCode.ADD_FLIGHT_FULL_FAILURE) {
+            return null;
+        }
+
+        return response.getFlightFull();
+    }
+
+    public FlightRaw getFlightRaw(Long id) {
+        Request request = new Request();
+        request.setRequestCode(RequestCode.GET_FLIGHT_RAW);
+        request.setFlightRawId(id);
+        Response response;
+
+        try {
+            oos.writeObject(request);
+            response = (Response) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (response.getResponseCode() == ResponseCode.GET_FLIGHT_RAW_FAILURE) {
+            return null;
+        }
+
+        return response.getFlightRaw();
+    }
+
+    public boolean buyTicket(FlightFull flightFull) {
+        if (Main.currentUser == null) {
+            return false;
+        }
+        Request request = new Request();
+        request.setRequestCode(RequestCode.BUY_TICKET);
+        request.setFlightFull(flightFull);
+        request.setUserId(Main.currentUser.getId());
+        Response response;
+
+        try {
+            oos.writeObject(request);
+            response = (Response) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return response.getResponseCode() != ResponseCode.BUY_TICKET_FAILURE;
+    }
+
+    public ObservableList<FlightFull> getBoughtFlights() {
+        if (Main.currentUser == null) {
+            return null;
+        }
+        Request request = new Request();
+        request.setRequestCode(RequestCode.SHOW_BOUGHT_FLIGHTS);
+        request.setUserId(Main.currentUser.getId());
+        Response response;
+
+        try {
+            oos.writeObject(request);
+            response = (Response) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if (response.getResponseCode() == ResponseCode.SHOW_BOUGHT_FLIGHTS_FAILURE) {
+            return null;
+        }
+
+        lastFlights.clear();
+        lastFlights.setAll(response.getFlightsFull());
+
+        return lastFlights;
     }
 }

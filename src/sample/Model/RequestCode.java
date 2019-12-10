@@ -9,4 +9,8 @@ public enum RequestCode {
     LOGIN,
     REGISTRATION,
     ADD_CITY,
+    ADD_FLIGHT_FULL,
+    GET_FLIGHT_RAW,
+    BUY_TICKET,
+    SHOW_BOUGHT_FLIGHTS,
 }

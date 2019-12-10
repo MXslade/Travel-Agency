@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<VBox fx:controller="sample.client_side.Controllers.UserAccountController"
+      xmlns:fx="http://javafx.com/fxml" alignment="BASELINE_CENTER"
+      spacing="16" prefWidth="1280" prefHeight="720">
+
+    <HBox styleClass="header-section" onMouseClicked="#showMain">
+        <Label text="Авибилеты"/>
+        <Label text="Билеты на поезд"/>
+        <Label text="Билеты на поезд"/>
+        <Label id="aviaticketsLabel" text="Личный кабинет"/>
+    </HBox>
+
+    <VBox fx:id="flightsVBox" spacing="16" alignment="CENTER"/>
+
+    <stylesheets>
+        <URL value="@../css/main.css"/>
+    </stylesheets>
+
+
+</VBox>

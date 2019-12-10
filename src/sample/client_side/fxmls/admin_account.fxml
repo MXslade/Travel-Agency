@@ -29,15 +29,17 @@
     <HBox spacing="16">
         <VBox spacing="8">
             <Label text="Добавить Рейс"/>
-            <TextField promptText="Компания"/>
+            <TextField fx:id="companyTextField" promptText="Компания"/>
             <ComboBox fx:id="fromCityComboBox"/>
             <ComboBox fx:id="toCityComboBox"/>
-            <DatePicker/>
-            <TextField promptText="Время(чч:мм)"/>
-            <TextField promptText="Цена"/>
-            <TextField promptText="Количество мест"/>
-            <Button text="Добавить перелет"/>
+            <DatePicker fx:id="datePicker"/>
+            <TextField fx:id="timeTextField" promptText="Время(чч:мм)"/>
+            <TextField fx:id="priceTextField" promptText="Цена"/>
+            <TextField fx:id="numberTextField" promptText="Количество мест"/>
+            <Button text="Добавить перелет" onMouseClicked="#addFlight"/>
         </VBox>
     </HBox>
+
+    <Button onMouseClicked="#exitPerformed"/>
 
 </VBox>
